@@ -1,17 +1,17 @@
 {
-  "persistentRadar": false,
-  "metricSystem": true,
-  "stamina": false,
-  "stress": false,
-  "fuel": false,
-  "circleMap": true,
+  "persistentRadar": true,
+  "metricSystem": false,
+  "stamina": true,
+  "stress": true,
+  "fuel": true,
+  "circleMap": false,
   "serverLogo": false,
   "voice": {
-    "enabled": false,
+    "enabled": true,
     "service": "pma-voice"
   },
   "seatbelt": {
-    "enabled": false,
+    "enabled": true,
     "key": "B"
   },
   "mapCycle": {
