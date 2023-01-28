@@ -38,6 +38,7 @@ end
 
 
 if cfg.persistentRadar then
+    local minimap = RequestScaleformMovie('minimap')
 
     local function setRadarState()
         if mapState == 0 then
@@ -55,6 +56,16 @@ if cfg.persistentRadar then
     end
 
     setRadarState()
+
+    CreateThread(function()
+        while true do
+            Wait(0)
+
+            BeginScaleformMovieMethod(minimap, 'SETUP_HEALTH_ARMOUR')
+            ScaleformMovieMethodAddParamInt(3)
+            EndScaleformMovieMethod()
+        end
+    end)
 
     RegisterCommand('cyclemap', function()
         if mapState == mapLimit then
