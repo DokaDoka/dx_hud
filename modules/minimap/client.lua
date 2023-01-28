@@ -67,16 +67,18 @@ if cfg.persistentRadar then
         end
     end)
 
-    RegisterCommand('cyclemap', function()
-        if mapState == mapLimit then
-            mapState = 0
-        else
-            mapState += 1
+    lib.addKeybind({
+        name = 'cyclemap',
+        description = 'Cycle Map',
+        defaultKey = 'Z',
+        onReleased = function(self)
+            if mapState == mapLimit then
+                mapState = 0
+            else
+                mapState += 1
+            end
+
+            setRadarState()
         end
-
-        setRadarState()
-    end)
-
-    RegisterKeyMapping('cyclemap', 'Cycle Map', 'keyboard', 'z')
-    TriggerEvent('chat:removeSuggestion', '/cyclemap')
+    })
 end
