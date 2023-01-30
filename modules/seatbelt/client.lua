@@ -41,17 +41,19 @@ if cfg.seatbelt.enabled then
         end
     end)
 
-    RegisterCommand('seatbelt', function()
-        if cache.vehicle then
-            local curVehicleClass = GetVehicleClass(cache.vehicle)
+    lib.addKeybind({
+        name = 'seatbelt',
+        description = 'Toggle Seatbelt',
+        defaultKey = cfg.seatbelt.key,
+        onReleased = function()
+            if cache.vehicle then
+                local curVehicleClass = GetVehicleClass(cache.vehicle)
 
-            if curVehicleClass ~= 8
-            and curVehicleClass ~= 13
-            and curVehicleClass ~= 14
-            then Seatbelt(not isBuckled) end
+                if curVehicleClass ~= 8
+                and curVehicleClass ~= 13
+                and curVehicleClass ~= 14
+                then Seatbelt(not isBuckled) end
+            end
         end
-    end, false)
-
-    RegisterKeyMapping('seatbelt', 'Toggle Seatbelt', 'keyboard', cfg.seatbelt.key)
-    TriggerEvent('chat:removeSuggestion', '/seatbelt')
+    })
 end
