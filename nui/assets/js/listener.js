@@ -35,6 +35,8 @@ window.onload = event => {
   const Buckle = document.getElementById('buckle');
   const Unbuckle = document.getElementById('unbuckle');
 
+  const Helmet = document.getElementById('HelmetIcon');
+
   Circle.VoiceIndicator.animate(0.66);
 
   window.addEventListener('message', function (event) {
@@ -217,6 +219,11 @@ window.onload = event => {
     if (action == 'setSeatbelt') {
       Seatbelt.style.display = data.toggled ? 'block' : 'none';
       Seatbelt.style.color = data.buckled ? 'rgb(0, 255, 100)' : 'rgb(255, 100, 100)';
+    }
+
+    if (action == 'setHelmet') {
+      Helmet.style.display = data.toggled ? 'block' : 'none';
+      Helmet.style.color = data.on ? 'rgb(0, 255, 100)' : 'rgb(255, 100, 100)';
     }
 
     if (action == 'playSound') {

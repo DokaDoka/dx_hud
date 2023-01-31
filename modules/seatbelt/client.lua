@@ -25,6 +25,37 @@ if cfg.seatbelt.enabled then
         isBuckled = status
     end
 
+    local helmetLoop = false
+
+    local Helmet = function(currentVehicle)
+        helmetLoop = true
+
+        SetPedConfigFlag(cache.ped, 380, false)
+
+        while currentVehicle == cache.vehicle and not IsPedWearingHelmet(cache.ped) do
+            Wait(0)
+        end
+
+        SetPedConfigFlag(cache.ped, 380, true)
+
+        if IsPedWearingHelmet(cache.ped) then
+            SendMessage('setHelmet', { toggled = true, on = true })
+        end
+
+        helmetLoop = false
+    end
+
+    local vehicleTypes = setmetatable({}, {
+        __index = function(self, index)
+            local data = Ox.GetVehicleData(index)
+
+            if data then
+                self[index] = data.type
+                return data.type
+            end
+        end
+    })
+
     local curInVehicle
 
     CreateThread(function()
@@ -32,7 +63,23 @@ if cfg.seatbelt.enabled then
             if nuiReady then
 			    local inVehicle = cache.vehicle
                 if inVehicle ~= curInVehicle then
-                    SendMessage('setSeatbelt', { toggled = inVehicle })
+                    local hasSeatbelt = true
+                    local hasHelmet = false
+
+                    if inVehicle then
+                        local vType = vehicleTypes[GetEntityArchetypeName(cache.vehicle)]
+
+                        if vType == 'bike' or vType == 'quadbike' or vType == 'amphibious_quadbike' then
+                            hasSeatbelt = false
+                            hasHelmet = true
+                        elseif vType == 'bicycle' then
+                            hasSeatbelt = false
+                        end
+                    end
+
+                    SendMessage('setSeatbelt', { toggled = inVehicle and hasSeatbelt })
+                    SendMessage('setHelmet', { toggled = inVehicle and hasHelmet, on = IsPedWearingHelmet(cache.ped) })
+
                     if not inVehicle and isBuckled then isBuckled = false end
                     curInVehicle = inVehicle
                 end
@@ -43,16 +90,19 @@ if cfg.seatbelt.enabled then
 
     lib.addKeybind({
         name = 'seatbelt',
-        description = 'Toggle Seatbelt',
+        description = 'Toggle Seatbelt / Helmet',
         defaultKey = cfg.seatbelt.key,
         onReleased = function()
             if cache.vehicle then
-                local curVehicleClass = GetVehicleClass(cache.vehicle)
+                local vType = vehicleTypes[GetEntityArchetypeName(cache.vehicle)]
 
-                if curVehicleClass ~= 8
-                and curVehicleClass ~= 13
-                and curVehicleClass ~= 14
-                then Seatbelt(not isBuckled) end
+                if vType == 'bike' or vType == 'quadbike' or vType == 'amphibious_quadbike' then
+                    if not (IsPedWearingHelmet(cache.ped) or helmetLoop) then
+                        Helmet(cache.vehicle)
+                    end
+                elseif vType ~= 'bicycle' then
+                    Seatbelt(not isBuckled)
+                end
             end
         end
     })
