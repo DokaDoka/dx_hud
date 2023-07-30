@@ -19,7 +19,6 @@ client_scripts {
 
 server_scripts {
     '@ox_core/imports/server.lua',
-    'modules/**/server.lua'
 }
 
 files {
