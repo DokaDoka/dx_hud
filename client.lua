@@ -60,9 +60,11 @@ local offVehicle
 local isResting
 local electricModels = {
     [`airtug`] = true,
+    [`buffalo5`] = true,
     [`caddy`] = true,
     [`caddy2`] = true,
     [`caddy3`] = true,
+    [`coureur`] = true,
     [`cyclone`] = true,
     [`cyclone2`] = true,
     [`dilettante`] = true,
